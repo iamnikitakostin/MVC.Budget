@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MVC.Budget.Data;
-using Microsoft.Extensions.DependencyInjection;
 using MVC.Budget.Interfaces;
 using MVC.Budget.Services;
 using MVC.Budget.Repositories;
@@ -27,8 +26,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<BudgetDbContext>();
+
     dbContext.Database.Migrate();
-    dbContext.Database.EnsureCreated();
 
     var services = scope.ServiceProvider;
 
@@ -41,11 +40,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

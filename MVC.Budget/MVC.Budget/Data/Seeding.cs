@@ -10,7 +10,7 @@ public class Seeding
         using (var context = new BudgetDbContext(
             serviceProvider.GetRequiredService<DbContextOptions<BudgetDbContext>>()))
         {
-            if (context.Transactions.Any())
+            if (context.Transactions != null && context.Transactions.Any())
             {
                 return;
             }

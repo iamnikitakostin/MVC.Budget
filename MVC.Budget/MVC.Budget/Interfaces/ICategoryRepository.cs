@@ -1,6 +1,6 @@
 ﻿using MVC.Budget.Models;
 
-namespace MVC.Budget.Repositories;
+namespace MVC.Budget.Interfaces;
 
 public interface ICategoryRepository
 {

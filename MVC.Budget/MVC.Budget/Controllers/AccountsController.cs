@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC.Budget.Data;
 using MVC.Budget.Interfaces;
@@ -74,7 +69,7 @@ namespace MVC.Budget.Controllers
 
             if (ModelState.IsValid)
             {
-                _accountService.AddAsync(account);
+                await _accountService.AddAsync(account);
                 return RedirectToAction(nameof(Index));
             }
             return View(account);
@@ -112,7 +107,7 @@ namespace MVC.Budget.Controllers
             {
                 try
                 {
-                    _accountService.UpdateAsync(account);
+                    await _accountService.UpdateAsync(account);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

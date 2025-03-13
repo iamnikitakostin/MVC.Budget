@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MVC.Budget.Data;
+using MVC.Budget.Interfaces;
 using MVC.Budget.Models;
 
 namespace MVC.Budget.Repositories;

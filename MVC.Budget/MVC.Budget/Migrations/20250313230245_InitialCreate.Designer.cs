@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVC.Budget.Migrations
 {
     [DbContext(typeof(BudgetDbContext))]
-    [Migration("20250308050044_InitialCreate")]
+    [Migration("20250313230245_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,6 +24,26 @@ namespace MVC.Budget.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MVC.Budget.Models.Account", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Accounts");
+                });
 
             modelBuilder.Entity("MVC.Budget.Models.Category", b =>
                 {
@@ -50,9 +70,8 @@ namespace MVC.Budget.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AccountId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -75,6 +94,8 @@ namespace MVC.Budget.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountId");
+
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Transactions");
@@ -82,13 +103,26 @@ namespace MVC.Budget.Migrations
 
             modelBuilder.Entity("MVC.Budget.Models.Transaction", b =>
                 {
+                    b.HasOne("MVC.Budget.Models.Account", "Account")
+                        .WithMany("Transactions")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MVC.Budget.Models.Category", "Category")
                         .WithMany("Transactions")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Account");
+
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("MVC.Budget.Models.Account", b =>
+                {
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("MVC.Budget.Models.Category", b =>
